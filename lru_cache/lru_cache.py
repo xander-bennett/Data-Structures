@@ -42,12 +42,13 @@ class LRUCache:
     def set(self, key, value):
         if key in self.cache:
             node = self.cache[key]
+            node.value = (key, value)
             self.storage.move_to_end(node)
-            node.value = [key, value]
+            return
 
         if self.limit == self.length:
-            del self.cache[self.storage.head.value[0]]
-            self.storage.remove_from_head()
+            key_value = self.storage.remove_from_head()
+            del self.cache[key_value[0]]
 
         self.length += 1
         self.storage.add_to_tail((key,value))
